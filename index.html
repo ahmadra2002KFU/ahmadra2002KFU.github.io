@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ahmad Rabaiah — Contact card</title>
+<meta name="description" content="Digital business card of Ahmad Rabaiah — Andexa">
+<meta name="theme-color" content="#0E1412">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* dark — the card's default face */
+    --bg:#0E1412;
+    --surface:#151D1A;
+    --ink:#EDEAE0;
+    --muted:#9AA09A;
+    --line:#273129;
+    --accent:#56A896;
+    --accent-soft:rgba(86,168,150,.10);
+    --btn-bg:#1E6B5D;
+    --btn-bg-hover:#17594D;
+    --btn-ink:#F2F0E8;
+    --glow:rgba(86,168,150,.07);
+    --shadow:0 28px 70px -32px rgba(0,0,0,.75), 0 2px 8px rgba(0,0,0,.35);
+    --ar-body:"IBM Plex Sans Arabic",system-ui,sans-serif;
+    --ar-display:"Amiri",serif;
+    --en-display:"Fraunces",Georgia,serif;
+  }
+  html[data-theme="light"]{
+    --bg:#F6F5F1;
+    --surface:#FDFCF9;
+    --ink:#1C2422;
+    --muted:#7A756A;
+    --line:#E6E2D8;
+    --accent:#175B52;
+    --accent-soft:#EDF2F0;
+    --btn-bg:#175B52;
+    --btn-bg-hover:#124A43;
+    --btn-ink:#FDFCF9;
+    --glow:rgba(255,255,255,.9);
+    --shadow:0 24px 60px -30px rgba(28,36,34,.28), 0 2px 6px rgba(28,36,34,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    min-height:100vh;
+    min-height:100dvh;
+    background:var(--bg);
+    background-image:radial-gradient(ellipse 90% 60% at 50% -10%, var(--glow) 0%, rgba(255,255,255,0) 60%);
+    color:var(--ink);
+    font-family:var(--ar-body);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:28px 18px;
+  }
+
+  .scene{width:100%;max-width:400px;perspective:1600px}
+
+  .card{
+    position:relative;
+    width:100%;
+    transform-style:preserve-3d;
+    transition:transform .8s cubic-bezier(.2,.75,.25,1);
+  }
+  .card.flipped{transform:rotateY(180deg)}
+  html[dir="rtl"] .card.flipped{transform:rotateY(-180deg)}
+
+  .face{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    padding:26px 26px;
+  }
+  .face.back{
+    position:absolute;
+    inset:0;
+    transform:rotateY(180deg);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+  }
+  html[dir="rtl"] .face.back{transform:rotateY(-180deg)}
+
+  @media (prefers-reduced-motion: reduce){
+    .card{transition:none}
+    .card.flipped{transform:none}
+    html[dir="rtl"] .card.flipped{transform:none}
+    .card.flipped .face.front{visibility:hidden}
+    .card:not(.flipped) .face.back{visibility:hidden}
+    .face.back{transform:none}
+    html[dir="rtl"] .face.back{transform:none}
+  }
+
+  /* ---------- header row ---------- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+  .wordmark{
+    font-family:var(--en-display);
+    font-weight:600;
+    font-size:.78rem;
+    letter-spacing:.32em;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+  .controls{display:flex;gap:8px}
+  .chip{
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--ar-body);
+    font-size:.78rem;
+    font-weight:500;
+    border-radius:999px;
+    padding:5px 13px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .chip:hover{color:var(--ink);border-color:var(--muted)}
+  .chip svg{width:14px;height:14px;stroke:currentColor}
+
+  /* ---------- identity ---------- */
+  .portrait{
+    width:104px;height:104px;
+    margin:0 auto 16px;
+    border-radius:50%;
+    border:1px solid var(--accent);
+    padding:5px;
+    position:relative;
+  }
+  .portrait::after{
+    content:"";
+    position:absolute;inset:2px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    pointer-events:none;
+  }
+  .portrait img{
+    width:100%;height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .identity{text-align:center}
+  .name{
+    font-family:var(--en-display);
+    font-weight:600;
+    font-size:1.9rem;
+    line-height:1.2;
+  }
+  html[lang="ar"] .name{font-family:var(--ar-display);font-weight:700;font-size:2.15rem;line-height:1.35}
+  .role{margin-top:6px;font-size:.95rem;color:var(--muted);font-weight:500}
+  .org{color:var(--accent)}
+
+  .rule{
+    display:flex;align-items:center;gap:10px;
+    margin:22px 0 18px;
+  }
+  .rule::before,.rule::after{content:"";height:1px;flex:1;background:var(--line)}
+  .rule svg{display:block}
+
+  /* ---------- actions ---------- */
+  .actions{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .action{
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    padding:12px 4px 10px;
+    border-radius:12px;
+    border:1px solid transparent;
+    text-decoration:none;
+    color:var(--ink);
+  }
+  .action:hover{background:var(--accent-soft);border-color:var(--line)}
+  .action svg{width:21px;height:21px;stroke:var(--accent)}
+  .action small{font-size:.72rem;font-weight:500;color:var(--muted)}
+
+  /* ---------- buttons ---------- */
+  .buttons{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;
+    padding:14px 18px;
+    border-radius:12px;
+    font-family:var(--ar-body);
+    font-size:.98rem;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    border:1px solid transparent;
+  }
+  .btn svg{width:18px;height:18px}
+  .btn-primary{background:var(--btn-bg);color:var(--btn-ink)}
+  .btn-primary:hover{background:var(--btn-bg-hover)}
+  .btn-primary svg{stroke:var(--btn-ink)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--muted)}
+  .btn-ghost svg{stroke:var(--ink)}
+
+  :is(.btn,.action,.chip):focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+
+  /* ---------- back face / QR ---------- */
+  .qr-frame{
+    background:#FFFFFF;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    line-height:0;
+  }
+  .qr-frame img{width:196px;height:196px;image-rendering:pixelated}
+  .qr-caption{font-size:.95rem;font-weight:500;text-align:center}
+  .qr-url{
+    font-size:.72rem;color:var(--muted);
+    direction:ltr;text-align:center;
+    word-break:break-all;
+    max-width:240px;
+  }
+  .back .btn{width:auto;padding:10px 26px}
+
+  footer{
+    margin-top:26px;
+    font-size:.72rem;
+    color:var(--muted);
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-family:var(--en-display);
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <div class="card" id="card">
+
+    <!-- front face -->
+    <section class="face front" aria-hidden="false">
+      <div class="topbar">
+        <span class="wordmark">Andexa</span>
+        <div class="controls">
+          <button class="chip" id="themeToggle" type="button" aria-label="Switch theme">
+            <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          </button>
+          <button class="chip" id="langToggle" type="button">عربي</button>
+        </div>
+      </div>
+
+      <div class="portrait"><img src="ahmad.jpg" alt="Ahmad Rabaiah"></div>
+
+      <div class="identity">
+        <h1 class="name" data-ar="أحمد ربايعة" data-en="Ahmad Rabaiah">Ahmad Rabaiah</h1>
+        <p class="role">
+          <span data-ar="شريك مؤسس" data-en="Co-Founder">Co-Founder</span>
+          <span aria-hidden="true"> · </span>
+          <span class="org" data-ar="أنديكسا" data-en="Andexa">Andexa</span>
+        </p>
+      </div>
+
+      <div class="rule" aria-hidden="true">
+        <svg width="7" height="7" viewBox="0 0 7 7"><rect x="3.5" y="0.6" width="4.1" height="4.1" transform="rotate(45 3.5 3.5)" fill="none" stroke="var(--accent)" stroke-width="1"/></svg>
+      </div>
+
+      <nav class="actions" aria-label="Contact options">
+        <a class="action" id="linkCall" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <small data-ar="اتصال" data-en="Call">Call</small>
+        </a>
+        <a class="action" id="linkWhatsApp" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <small data-ar="واتساب" data-en="WhatsApp">WhatsApp</small>
+        </a>
+        <a class="action" id="linkEmail" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <small data-ar="بريد" data-en="Email">Email</small>
+        </a>
+        <a class="action" id="linkSite" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <small data-ar="موقعي" data-en="Website">Website</small>
+        </a>
+        <a class="action" id="linkLinkedIn" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4V9h4v1.5A5.98 5.98 0 0 1 16 8z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <small data-ar="لينكدإن" data-en="LinkedIn">LinkedIn</small>
+        </a>
+      </nav>
+
+      <div class="buttons">
+        <a class="btn btn-primary" id="saveContact" href="ahmad.vcf" download="Ahmad-Rabaiah.vcf">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></svg>
+          <span data-ar="أضفني إلى جهات الاتصال" data-en="Save my contact">Save my contact</span>
+        </a>
+        <button class="btn btn-ghost" id="flipToQr" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3z"/><path d="M20 14h1v1h-1z"/><path d="M14 20h1v1h-1z"/><path d="M20 20h1v1h-1z"/></svg>
+          <span data-ar="شارك بطاقتي — رمز QR" data-en="Share my card — QR code">Share my card — QR code</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- back face: QR code -->
+    <section class="face back" aria-hidden="true">
+      <div class="qr-frame"><img id="qrImage" alt="QR code of this card"></div>
+      <p class="qr-caption" data-ar="امسح الرمز لأخذ بطاقتي" data-en="Scan to take my card">Scan to take my card</p>
+      <p class="qr-url" id="qrUrl"></p>
+      <button class="btn btn-ghost" id="flipToFront" type="button">
+        <span data-ar="عودة إلى البطاقة" data-en="Back to card">Back to card</span>
+      </button>
+    </section>
+
+  </div>
+</div>
+
+<footer>Riyadh</footer>
+
+<script src="qrcode.min.js"></script>
+<script>
+  /* ═══════════ edit your details here ═══════════
+     (keep ahmad.vcf in sync — that file is what gets saved to contacts) */
+  const CARD = {
+    url: "",                          /* final card URL after deployment; empty = use the page's own URL */
+    phone: "+966547937209",
+    whatsapp: "966547937209",
+    email: "arabaiah@mufeed.com",
+    website: "https://ahmadgra.com",
+    linkedin: "https://www.linkedin.com/in/ahmed-rabaiah-a12943259/"
+  };
+  /* ══════════════════════════════════════════════ */
+
+  document.getElementById("linkCall").href = "tel:" + CARD.phone;
+  document.getElementById("linkWhatsApp").href = "https://wa.me/" + CARD.whatsapp;
+  document.getElementById("linkEmail").href = "mailto:" + CARD.email;
+  document.getElementById("linkSite").href = CARD.website;
+  document.getElementById("linkLinkedIn").href = CARD.linkedin;
+
+  /* QR code — points at this card's own URL */
+  const cardUrl = CARD.url || window.location.href.split("#")[0];
+  try {
+    const qr = qrcode(0, "M");
+    qr.addData(cardUrl);
+    qr.make();
+    document.getElementById("qrImage").src = qr.createDataURL(8, 16);
+  } catch (e) {
+    document.getElementById("qrUrl").textContent = "QR unavailable";
+  }
+  document.getElementById("qrUrl").textContent = cardUrl.replace(/^https?:\/\//, "");
+
+  /* card flip */
+  const card = document.getElementById("card");
+  const front = document.querySelector(".face.front");
+  const back = document.querySelector(".face.back");
+  function setFlipped(flipped) {
+    card.classList.toggle("flipped", flipped);
+    front.setAttribute("aria-hidden", flipped);
+    back.setAttribute("aria-hidden", !flipped);
+  }
+  document.getElementById("flipToQr").addEventListener("click", () => setFlipped(true));
+  document.getElementById("flipToFront").addEventListener("click", () => setFlipped(false));
+
+  /* language toggle — English first */
+  const langToggle = document.getElementById("langToggle");
+  function setLang(lang) {
+    const isAr = lang === "ar";
+    document.documentElement.lang = lang;
+    document.documentElement.dir = isAr ? "rtl" : "ltr";
+    langToggle.textContent = isAr ? "English" : "عربي";
+    document.title = isAr ? "أحمد ربايعة — بطاقة تواصل" : "Ahmad Rabaiah — Contact card";
+    document.querySelectorAll("[data-ar]").forEach(el => {
+      el.textContent = isAr ? el.dataset.ar : el.dataset.en;
+    });
+    try { localStorage.setItem("card-lang", lang); } catch (e) {}
+  }
+  langToggle.addEventListener("click", () => {
+    setLang(document.documentElement.lang === "ar" ? "en" : "ar");
+  });
+  try {
+    if (localStorage.getItem("card-lang") === "ar") setLang("ar");
+  } catch (e) {}
+
+  /* theme toggle — dark first */
+  const themeIcon = document.getElementById("themeIcon");
+  const SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+  const MOON = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  function setTheme(theme) {
+    if (theme === "light") {
+      document.documentElement.setAttribute("data-theme", "light");
+      themeIcon.innerHTML = MOON;
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      themeIcon.innerHTML = SUN;
+    }
+    document.querySelector('meta[name="theme-color"]')
+      .setAttribute("content", theme === "light" ? "#F6F5F1" : "#0E1412");
+    try { localStorage.setItem("card-theme", theme); } catch (e) {}
+  }
+  document.getElementById("themeToggle").addEventListener("click", () => {
+    const isLight = document.documentElement.getAttribute("data-theme") === "light";
+    setTheme(isLight ? "dark" : "light");
+  });
+  try {
+    if (localStorage.getItem("card-theme") === "light") setTheme("light");
+  } catch (e) {}
+</script>
+</body>
+</html>
