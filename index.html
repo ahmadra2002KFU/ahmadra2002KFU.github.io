@@ -340,6 +340,29 @@
   document.getElementById("linkSite").href = CARD.website;
   document.getElementById("linkLinkedIn").href = CARD.linkedin;
 
+  /* Save-contact button, per platform:
+     - Android: INSERT-contact intent — opens the new-contact screen pre-filled
+       (Android intents can't carry the photo; the vcf is the fallback)
+     - iOS: plain navigation to the vcf so Safari previews it inline
+     - desktop: keep the download attribute */
+  const saveBtn = document.getElementById("saveContact");
+  if (/android/i.test(navigator.userAgent)) {
+    const enc = encodeURIComponent;
+    saveBtn.removeAttribute("download");
+    saveBtn.href = "intent:#Intent;action=android.intent.action.INSERT;" +
+      "type=vnd.android.cursor.dir/contact;" +
+      "S.name=" + enc("Ahmad Rabaiah") + ";" +
+      "S.phone=" + enc(CARD.phone) + ";" +
+      "S.email=" + enc(CARD.email) + ";" +
+      "S.company=Andexa;" +
+      "S.job_title=" + enc("Co-Founder") + ";" +
+      "S.notes=" + enc("Andexa — AI Data Analyst · " + CARD.website + " · " + CARD.linkedin) + ";" +
+      "S.browser_fallback_url=" + enc(new URL("ahmad.vcf", location.href).href) + ";" +
+      "end";
+  } else if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    saveBtn.removeAttribute("download");
+  }
+
   /* QR code — points at this card's own URL */
   const cardUrl = CARD.url || window.location.href.split("#")[0];
   try {
